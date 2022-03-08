@@ -43,9 +43,9 @@
           <tr>
             <td>
               {{ gericht.id }}
-            </td>
+            </td>            
             <td>
-              {{ gericht.name }}
+              <a href="{{ path('gericht.anzeigen', {id: gericht.id}) }}">{{ gericht.name }}</a>
             </td>
             <td>
               {{ gericht.beschreibung }}

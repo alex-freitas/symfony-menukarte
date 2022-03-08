@@ -22,6 +22,9 @@ class Gericht
     #[ORM\Column(type: 'float', nullable: true)]
     private $preis;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private $bild;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +62,18 @@ class Gericht
     public function setPreis(?float $preis): self
     {
         $this->preis = $preis;
+
+        return $this;
+    }
+
+    public function getBild(): ?string
+    {
+        return $this->bild;
+    }
+
+    public function setBild(string $bild): self
+    {
+        $this->bild = $bild;
 
         return $this;
     }

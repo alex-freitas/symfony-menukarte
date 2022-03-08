@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Gericht;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,6 +15,7 @@ class GericthType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('bild', FileType::class, ['mapped' => false])
             ->add('beschreibung')
             ->add('preis')
             ->add('speichern', SubmitType::class)

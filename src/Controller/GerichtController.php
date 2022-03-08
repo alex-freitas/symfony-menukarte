@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/gericht', name: 'gericht.')]
 class GerichtController extends AbstractController
-{ 
+{
     #[Route('/', name: 'bearbeiten')]
     public function index(GerichtRepository $repository): Response
     {
@@ -32,6 +32,16 @@ class GerichtController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
+            //$bild = $request->files->get('gericht')['bild'];
+            $bild = $form->get('bild')->getData();
+
+            if ($bild) {
+                $dateiname = md5(uniqid()) . '.' . $bild->guessExtension();
+                $bilderOrdnerPath = $this->getParameter('bilder_ordner');
+                $bild->move($bilderOrdnerPath, $dateiname);
+                $gericht->setBild($dateiname);
+            }
+
             //$em = $this->getDoctrine()->getManager();
             $entityManager = $doctrine->getManager();
             $entityManager->persist($gericht);
@@ -44,17 +54,26 @@ class GerichtController extends AbstractController
             'anlegenForm' => $form->createView()
         ]);
     }
-    
+
     #[Route('/entfernen/{id}', name: 'entfernen')]
-    public function entfernen($id, GerichtRepository $repository, ManagerRegistry $doctrine) 
+    public function entfernen($id, GerichtRepository $repository, ManagerRegistry $doctrine)
     {
         $entityManager = $doctrine->getManager();
         $gericht = $repository->find($id);
         $entityManager->remove($gericht);
         $entityManager->flush();
 
-        $this->addFlash('erfolg', 'Gericht wurde erfolgreich entfernt');    
+        $this->addFlash('erfolg', 'Gericht wurde erfolgreich entfernt');
 
         return $this->redirect($this->generateUrl('gericht.bearbeiten'));
-    }    
+    }
+
+    #[Route('/anzeigen/{id}', name: 'anzeigen')]
+    public function anzeigen(Gericht $gericht) {
+        dump($gericht);
+
+        return $this->render('gericht/anzeigen.html.twig', [
+            'gericht' => $gericht
+        ]);
+    }
 }
