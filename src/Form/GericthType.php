@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Gericht;
+use App\Entity\Kategorie;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -17,6 +19,7 @@ class GericthType extends AbstractType
             ->add('name')
             ->add('bild', FileType::class, ['mapped' => false])
             ->add('beschreibung')
+            ->add('kategorie', EntityType::class, ['class' => Kategorie::class])
             ->add('preis')
             ->add('speichern', SubmitType::class)
         ;
