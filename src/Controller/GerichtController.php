@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class GerichtController extends AbstractController
 {
     #[Route('/', name: 'bearbeiten')]
-    public function index(GerichtRepository $repository): Response
+    public function edit(GerichtRepository $repository): Response
     {
         $gerichte = $repository->findAll();
 
@@ -25,7 +25,7 @@ class GerichtController extends AbstractController
     }
 
     #[Route('/anlegen', name: 'anlegen')]
-    public function anlegen(Request $request, ManagerRegistry $doctrine)
+    public function create(Request $request, ManagerRegistry $doctrine)
     {
         $gericht = new Gericht();
         $form = $this->createForm(GericthType::class, $gericht);
@@ -56,7 +56,7 @@ class GerichtController extends AbstractController
     }
 
     #[Route('/entfernen/{id}', name: 'entfernen')]
-    public function entfernen($id, GerichtRepository $repository, ManagerRegistry $doctrine)
+    public function remove($id, GerichtRepository $repository, ManagerRegistry $doctrine)
     {
         $entityManager = $doctrine->getManager();
         $gericht = $repository->find($id);
@@ -64,12 +64,14 @@ class GerichtController extends AbstractController
         $entityManager->flush();
 
         $this->addFlash('erfolg', 'Gericht wurde erfolgreich entfernt');
+        
+        $url = $this->generateUrl('gericht.bearbeiten');
 
-        return $this->redirect($this->generateUrl('gericht.bearbeiten'));
+        return $this->redirect($url);
     }
 
     #[Route('/anzeigen/{id}', name: 'anzeigen')]
-    public function anzeigen(Gericht $gericht) {
+    public function show(Gericht $gericht) {
         dump($gericht);
 
         return $this->render('gericht/anzeigen.html.twig', [

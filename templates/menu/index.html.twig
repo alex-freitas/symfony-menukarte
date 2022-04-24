@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+  {% for message in app.flashes('bestell') %}
+    <div class="alert alert-success">
+      <h3>{{ message }}</h3>
+    </div>
+  {% endfor %}
+
+  <section class="playlist-section spad">
+    <div class="container-fluid">
+      <div class="section-title">
+        <h2>
+          Menükarte
+        </h2>
+      </div>
+      <div class="container">
+        <ul class="playlist-filter controls">
+          <li class="control" data-filter=".Getränk">Getränke</li>
+          <li class="control" data-filter=".Vorspeise">Vorspeisen</li>
+          <li class="control" data-filter=".Haupspeise">Hauptspeisen</li>
+          <li class="control" data-filter=".Nachspeise">Nachspeisen</li>
+          <li class="control" data-filter="all">Alle Gerichte</li>
+        </ul>
+      </div>
+
+      <div class="clearfix"></div>
+
+      <div class="row playlist-area">
+        {% for gericht in gerichte %}
+          <div class="mix col-lg-3 col-md-4 col-sm-6 {{ gericht.kategorie }}">
+            <div class="playlist-item">
+              <img src="{{ asset('bilder/' ~ gericht.bild) }}" alt="" />
+              <h5>
+                {{gericht.name}} - {{ gericht.beschreibung }} - EUR {{ gericht.preis }}
+              </h5>
+              <p>
+                BestNr. {{ gericht.id }}
+                <a 
+                  class="btn btn-outline-danger btn-sm" 
+                  href="{{ path('bestellen', {id: gericht.id}) }}"
+                  role="button">Bestellen</a>
+              </p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endblock %}
