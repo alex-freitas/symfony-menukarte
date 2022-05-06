@@ -3,15 +3,15 @@
 namespace App\Controller;
 
 use App\Repository\GerichtRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class HomeController extends AbstractController
+class HomeController extends Controller
 {
     #[Route('/', name: 'home')]
     public function index(GerichtRepository $gerichtRepository): Response
-    {
+    {        
         $gerichte = $gerichtRepository->findAll();
 
         $zufall = array_rand($gerichte, 2);

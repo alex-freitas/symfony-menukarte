@@ -8,6 +8,7 @@
   <div class="container">
     <h2>Ihre Bestellungen</h2>
     <br />
+
     <table class="table table-striped">
       <thead>
         <tr>
@@ -24,11 +25,41 @@
             <tr>
                 <td>{{ bestellung.bnummer }}</td>
                 <td>{{ bestellung.name }}</td>
-                <td>{{ bestellung.preis }}</td>
+                <td>{{ bestellung.preis }}</td>               
+
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <td>
+                  <div class="dropdown show">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" 
+                      id="dropdownMenuLink" data-toggle="dropdown" 
+                      aria-haspopup="true" aria-expanded="false">
+                      {{ bestellung.status }}
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <a class="dropdown-item" 
+                        href="{{ path('status', { id: bestellung.id, status: 'offen'}) }}">offen</a>
+                      <a class="dropdown-item" 
+                        href="{{ path('status', { id: bestellung.id, status: 'fertig'}) }}">fertig</a>
+                      <a class="dropdown-item" 
+                        href="{{ path('status', { id: bestellung.id, status: 'archiv'}) }}">archiv</a>
+                    </div>
+                  </div>
+                </td>
+                {% else %}
                 <td>{{ bestellung.status }}</td>
+                {% endif %}
+
+                <td>
+                  {% if bestellung.status == 'offen' %}
+                  <a role="button" class="btn btn-outline-danger btn-sm" 
+                    href="{{ path('loeschen', { id: bestellung.id }) }}">Entfernen</a>
+                  {% endif %}  
+                </td>
             </tr>
         {% endfor %}        
       </tbody>
     </table>
+
   </div>
 {% endblock %}
