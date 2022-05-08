@@ -30,7 +30,8 @@ class BestellungController extends Controller
     }
 
     #[Route('/bestellen/{id}', name: 'bestellen')]
-    public function order(Gericht $gericht): Response {        
+    public function order(Gericht $gericht): Response {     
+        
         $bestellung = (new Bestellung())
             ->setTisch("tisch1")
             ->setName($gericht->getName())
@@ -53,7 +54,12 @@ class BestellungController extends Controller
     public function status($id, $status): Response  {
         $em = $this->doctrine->getManager();
         
-        $bestellung = $em->getRepository(Bestellung::class)->find($id);    
+        /**
+         * @var BestellungRepository
+         */        
+        $repository = $em->getRepository(Bestellung::class);
+        
+        $bestellung = $repository->find($id);    
         $bestellung->setStatus($status);
 
         $em->flush();
@@ -63,10 +69,20 @@ class BestellungController extends Controller
     }
 
     #[Route('/loeschen/{id}', name: 'loeschen')]
-    public function remove($id, BestellungRepository $repository)
+    //public function remove($id, BestellungRepository $repository)
+    public function remove(Bestellung $entity)
     {
+
+        // $ent = $repository->findOneBy(['id' => $id]);
+
+        // dump($ent);
+
+        // $entityManager = $this->doctrine->getManager();
+        // $entity = $repository->find($id);
+
+        
+
         $entityManager = $this->doctrine->getManager();
-        $entity = $repository->find($id);
 
         if ($entity) {
             $entityManager->remove($entity);
